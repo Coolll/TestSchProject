@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+
+    <properties resource="mysql.properties">
+
+    </properties>
+
+    <settings>
+        <setting name="logImpl" value="LOG4J2"/>
+    </settings>
+
+    <environments default="development_poetry">
+        <environment id="development_poetry">
+            <transactionManager type="JDBC"></transactionManager>
+            <dataSource type="com.bianla.utils.DBCPDataSourceFactory">
+                <property name="driverClassName" value="${poetry.dev.jdbc.driver}"/>
+                <property name="url" value="${poetry.dev.jdbc.url}"/>
+                <property name="username" value="${poetry.dev.jdbc.username}"/>
+                <property name="password" value="${poetry.dev.jdbc.password}"/>
+                <property name="minIdle" value="1"/>
+                <property name="maxIdle" value="5"/>
+                <property name="validationQuery" value="SELECT 1"/>
+                <property name="testOnBorrow" value="true"/>
+                <property name="testOnReturn" value="false"/>
+                <property name="testWhileIdle" value="true"/>
+                <property name="timeBetweenEvictionRunsMillis" value="3600000"/>
+                <property name= "numTestsPerEvictionRun" value="5" />
+                <property name="minEvictableIdleTimeMillis" value="3600000"/>
+            </dataSource>
+        </environment>
+
+        <environment id="remoteTest_poetry">
+            <transactionManager type="JDBC"></transactionManager>
+            <dataSource type="com.bianla.utils.DBCPDataSourceFactory">
+                <property name="driverClassName" value="${poetry.rt.jdbc.driver}"/>
+                <property name="url" value="${poetry.rt.jdbc.url}"/>
+                <property name="username" value="${poetry.rt.jdbc.username}"/>
+                <property name="password" value="${poetry.rt.jdbc.password}"/>
+                <property name="minIdle" value="1"/>
+                <property name="maxIdle" value="5"/>
+                <property name="validationQuery" value="SELECT 1"/>
+                <property name="testOnBorrow" value="true"/>
+                <property name="testOnReturn" value="false"/>
+                <property name="testWhileIdle" value="true"/>
+                <property name="timeBetweenEvictionRunsMillis" value="600000"/>
+                <property name= "numTestsPerEvictionRun" value="5" />
+                <property name="minEvictableIdleTimeMillis" value="600000"/>
+            </dataSource>
+        </environment>
+
+        <environment id="production_poetry">
+            <transactionManager type="JDBC"></transactionManager>
+            <dataSource type="com.bianla.utils.DBCPDataSourceFactory">
+                <property name="driverClassName" value="${poetry.pro.jdbc.driver}"/>
+                <property name="url" value="${poetry.pro.jdbc.url}"/>
+                <property name="username" value="${poetry.pro.jdbc.username}"/>
+                <property name="password" value="${poetry.pro.jdbc.password}"/>
+                <property name="minIdle" value="1"/>
+                <property name="maxIdle" value="5"/>
+                <property name="validationQuery" value="SELECT 1"/>
+                <property name="testOnBorrow" value="true"/>
+                <property name="testOnReturn" value="false"/>
+                <property name="testWhileIdle" value="true"/>
+                <property name="timeBetweenEvictionRunsMillis" value="600000"/>
+                <property name= "numTestsPerEvictionRun" value="5" />
+                <property name="minEvictableIdleTimeMillis" value="600000"/>
+            </dataSource>
+        </environment>
+
+
+    </environments>
+
+
+    <mappers>
+        <mapper resource="mapper/userMapper.xml"/>
+        <mapper resource="mapper/taskMapper.xml"/>
+        <mapper resource="mapper/mealRecordMapper.xml"/>
+        <mapper resource="mapper/nutritionMapper.xml"/>
+        <mapper resource="mapper/foodMapper.xml"/>
+    </mappers>
+
+
+
+
+</configuration>

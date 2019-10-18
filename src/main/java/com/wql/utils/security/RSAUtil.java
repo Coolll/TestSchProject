@@ -23,6 +23,11 @@ public class RSAUtil {
 
     public static void main(String[] args) {
 
+        String a = "";
+        Integer b = Integer.parseInt(a);
+        String tempUserString = Integer.toString(b);
+        
+        System.out.println(b);
     }
 
     //解密
