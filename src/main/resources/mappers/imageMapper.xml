@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wql.poetry.dao.ImageDao">
+    <insert id="insertImage" parameterType="com.wql.poetry.model.ImageEntity" useGeneratedKeys="true" keyProperty="image_id" keyColumn="image_id">
+        insert into bgImage_table(image_url,class_info)
+        values (
+        #{image_url,jdbcType=CHAR},
+        #{class_info,jdbcType=CHAR}
+        )
+    </insert>
+
+</mapper>

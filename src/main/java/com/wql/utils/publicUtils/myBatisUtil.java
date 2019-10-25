@@ -21,9 +21,9 @@ public class myBatisUtil {
 
     //连接不同数据库的环境变量
     public enum DatabaseEnvironment{
-        DEV_FOODAI("development_foodAI"),
-        RT_FOODAI("remoteTest_foodAI"),
-        PRO_FOODAI("production_foodAI");
+        DEV_POETRY("development_poetry"),
+        RT_POETRY("remoteTest_poetry"),
+        PRO_POETRY("production_poetry");
 
 
         private DatabaseEnvironment(String environmentString){
@@ -45,21 +45,21 @@ public class myBatisUtil {
 
 
     //打开foodAI数据库session
-    public static SqlSessionFactory openFoodAISqlFactory(){
+    public static SqlSessionFactory openPoetrySqlFactory(){
         switch (isProduction){
             case BL_ENVIRONMENT_DEV:
-                return openFactory(DatabaseEnvironment.DEV_FOODAI);
+                return openFactory(DatabaseEnvironment.DEV_POETRY);
             case BL_ENVIRONMENT_REMOTE_TEST:
-                return openFactory(DatabaseEnvironment.RT_FOODAI);
+                return openFactory(DatabaseEnvironment.RT_POETRY);
             case BL_ENVIRONMENT_PRODUCTION:
-                return openFactory(DatabaseEnvironment.PRO_FOODAI);
+                return openFactory(DatabaseEnvironment.PRO_POETRY);
             default:
                 System.out.println("未配置环境");
 
         }
 
         //默认返回开发环境
-        return openFactory(DatabaseEnvironment.DEV_FOODAI);
+        return openFactory(DatabaseEnvironment.DEV_POETRY);
 
     }
 
@@ -68,7 +68,7 @@ public class myBatisUtil {
     public static SqlSessionFactory openFactory(DatabaseEnvironment environment){
         //区分环境变量
         switch (environment){
-            case DEV_FOODAI:case RT_FOODAI:case PRO_FOODAI:
+            case DEV_POETRY:case RT_POETRY:case PRO_POETRY:
                 //需要使用food数据库
                 if (foodAI_sqlSessionFactory == null){
                     foodAI_sqlSessionFactory =  initSessionFactory(environment);

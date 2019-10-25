@@ -2,6 +2,51 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="">
+<mapper namespace="com.wql.user.dao.UserDao">
+
+    <insert id="insertUser" parameterType="com.wql.user.model.UserEntity" useGeneratedKeys="true" keyProperty="user_id" keyColumn="user_id">
+        insert into user_table(nick_name, password, user_poetry_class, poetry_storage, email, create_time, last_login_time, last_loginout_time)
+        values (
+                #{nick_name,jdbcType=CHAR},
+                #{password,jdbcType=CHAR},
+                #{user_poetry_class,jdbcType=CHAR},
+                #{poetry_storage,jdbcType=CHAR},
+                #{email,jdbcType=CHAR},
+                #{create_time,jdbcType=CHAR},
+                #{last_login_time,jdbcType=CHAR},
+                #{last_loginout_time,jdbcType=CHAR}
+        )
+    </insert>
+
+    <update id="updateUser" parameterType="com.wql.user.model.UserEntity">
+        update user_table
+        set
+        user_id = #{user_id}
+        <if test="nick_name != null">,nick_name=#{nick_name}</if>
+        <if test="password != null">,password = #{password}</if>
+        <if test="user_poetry_class != null">,user_poetry_class = #{user_poetry_class}</if>
+        <if test="poetry_storage != null">,poetry_storage = #{poetry_storage}</if>
+        <if test="email != null">,email = #{email}</if>
+        <if test="last_login_time != null">,last_login_time = #{last_login_time}</if>
+        <if test="last_loginout_time != null">,last_loginout_time=#{last_loginout_time}</if>
+        where user_id=#{user_id}
+    </update>
+
+    <select id="findUser" resultType="com.wql.user.model.UserEntity">
+        select * from user_table
+        <where>
+            <if test="nick_name != null and nick_name != ''"> nick_name = #{nick_name}</if>>
+        </where>
+    </select>
+
+    <select id="findUserInfo" resultType="com.wql.user.model.UserEntity">
+        select * from user_table
+        <where>
+            <if test="nick_name != null and nick_name != ''"> nick_name = #{nick_name}</if>
+            <if test="user_id != 0 and user_id != null">and user_id=#{user_id}</if>
+
+        </where>
+    </select>
+
 
 </mapper>

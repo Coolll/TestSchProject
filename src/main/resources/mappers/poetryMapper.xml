@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wql.poetry.dao.PoetryDao">
+
+    <insert id="insertPoetry" parameterType="com.wql.poetry.model.PoetryEntity" useGeneratedKeys="true" keyProperty="poetry_id" keyColumn="poetry_id">
+        insert into poetry_table(poetry_id,name, author, content, addition_info, class_info,class_info_explain, main_class,main_class_explain, source,source_explain, transfer_info, default_image_id)
+        values (
+        #{poetry_id,jdbcType=INTEGER},
+        #{name,jdbcType=CHAR},
+        #{author,jdbcType=CHAR},
+        #{content,jdbcType=CHAR},
+        #{addition_info,jdbcType=CHAR},
+        #{class_info,jdbcType=CHAR},
+        #{class_info_explain,jdbcType=CHAR},
+        #{main_class,jdbcType=CHAR},
+        #{main_class_explain,jdbcType=CHAR},
+        #{source,jdbcType=CHAR},
+        #{source_explain,jdbcType=CHAR},
+        #{transfer_info,jdbcType=CHAR},
+        #{default_image_id,jdbcType=INTEGER}
+        )
+    </insert>
+
+
+
+</mapper>

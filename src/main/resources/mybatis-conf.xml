@@ -16,7 +16,7 @@
     <environments default="development_poetry">
         <environment id="development_poetry">
             <transactionManager type="JDBC"></transactionManager>
-            <dataSource type="com.bianla.utils.DBCPDataSourceFactory">
+            <dataSource type="com.wql.utils.publicUtils.DBCPDataSourceFactory">
                 <property name="driverClassName" value="${poetry.dev.jdbc.driver}"/>
                 <property name="url" value="${poetry.dev.jdbc.url}"/>
                 <property name="username" value="${poetry.dev.jdbc.username}"/>
@@ -35,7 +35,7 @@
 
         <environment id="remoteTest_poetry">
             <transactionManager type="JDBC"></transactionManager>
-            <dataSource type="com.bianla.utils.DBCPDataSourceFactory">
+            <dataSource type="com.wql.utils.publicUtils.DBCPDataSourceFactory">
                 <property name="driverClassName" value="${poetry.rt.jdbc.driver}"/>
                 <property name="url" value="${poetry.rt.jdbc.url}"/>
                 <property name="username" value="${poetry.rt.jdbc.username}"/>
@@ -54,7 +54,7 @@
 
         <environment id="production_poetry">
             <transactionManager type="JDBC"></transactionManager>
-            <dataSource type="com.bianla.utils.DBCPDataSourceFactory">
+            <dataSource type="com.wql.utils.publicUtils.DBCPDataSourceFactory">
                 <property name="driverClassName" value="${poetry.pro.jdbc.driver}"/>
                 <property name="url" value="${poetry.pro.jdbc.url}"/>
                 <property name="username" value="${poetry.pro.jdbc.username}"/>
@@ -76,11 +76,10 @@
 
 
     <mappers>
-        <mapper resource="mapper/userMapper.xml"/>
-        <mapper resource="mapper/taskMapper.xml"/>
-        <mapper resource="mapper/mealRecordMapper.xml"/>
-        <mapper resource="mapper/nutritionMapper.xml"/>
-        <mapper resource="mapper/foodMapper.xml"/>
+        <mapper resource="mappers/poetryMapper.xml"/>
+        <mapper resource="mappers/imageMapper.xml"/>
+        <mapper resource="mappers/userMapper.xml"/>
+
     </mappers>
 
 
