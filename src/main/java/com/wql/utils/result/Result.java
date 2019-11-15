@@ -50,7 +50,7 @@ public class Result<T> {
         Result shareResult = new Result();
         shareResult.setRetCode(msg.getReturnCode());
         shareResult.setData("");
-        shareResult.setMessage(msg.getTipMessage()+"--"+msgStr);
+        shareResult.setMessage(msg.getTipMessage()+msgStr);
         return shareResult;
 
     }

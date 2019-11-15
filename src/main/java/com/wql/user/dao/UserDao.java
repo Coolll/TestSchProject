@@ -1,7 +1,10 @@
 package com.wql.user.dao;
 
+import com.wql.poetry.model.CollectionEntity;
 import com.wql.user.model.UserEntity;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface UserDao {
 
@@ -12,6 +15,14 @@ public interface UserDao {
 
     public void updateUser(UserEntity entity);
 
+
+    //查找一个人的收藏的诗词(仅返回ID)
+    public List<Integer> findUserLikeList(@Param("user_id")Integer userId);
+
+    //查找一个人的收藏的诗词(返回entity)
+    public List<CollectionEntity> findUserCollectionList(@Param("user_id")Integer userId,
+                                                         @Param("from_index")Integer from,
+                                                         @Param("count")Integer count);
 
 
 }

@@ -11,7 +11,7 @@ public class CodeMsg {
     public static CodeMsg SERVER_EXCEPTION = new CodeMsg(1001,"服务端异常");
     public static CodeMsg PARAMETER_ISNULL = new CodeMsg(1002,"参数为空");
     public static CodeMsg VERIFY_FAILED = new CodeMsg(1003,"身份校验失败");
-    public static CodeMsg MESSAGE_TIP = new CodeMsg(1004,"温馨提示");
+    public static CodeMsg MESSAGE_TIP = new CodeMsg(1004,"");
     private CodeMsg(int returnCode,String message){
         this.returnCode = returnCode;
         this.message = message;

@@ -10,6 +10,16 @@ public class UserEntity {
     private String create_time;
     private String last_login_time;
     private String last_loginout_time;
+    private String user_token;
+    private String head_image;
+
+    public String getHead_image() {
+        return head_image;
+    }
+
+    public void setHead_image(String head_image) {
+        this.head_image = head_image;
+    }
 
     public Integer getUser_id() {
         return user_id;
@@ -81,5 +91,13 @@ public class UserEntity {
 
     public void setLast_loginout_time(String last_loginout_time) {
         this.last_loginout_time = last_loginout_time;
+    }
+
+    public String getUser_token() {
+        return user_token;
+    }
+
+    public void setUser_token(String user_token) {
+        this.user_token = user_token;
     }
 }

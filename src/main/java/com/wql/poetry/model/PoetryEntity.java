@@ -13,7 +13,16 @@ public class PoetryEntity {
     private String source;
     private String source_explain;
     private String transfer_info;
-    private Integer default_image_id;
+    private Integer likes;
+    private Integer text_color;//0为默认色 1为白色
+
+    public Integer getText_color() {
+        return text_color;
+    }
+
+    public void setText_color(Integer text_color) {
+        this.text_color = text_color;
+    }
 
     public Integer getPoetry_id() {
         return poetry_id;
@@ -87,14 +96,6 @@ public class PoetryEntity {
         this.transfer_info = transfer_info;
     }
 
-    public Integer getDefault_image_id() {
-        return default_image_id;
-    }
-
-    public void setDefault_image_id(Integer default_image_id) {
-        this.default_image_id = default_image_id;
-    }
-
     public String getClass_info_explain() {
         return class_info_explain;
     }
@@ -117,5 +118,13 @@ public class PoetryEntity {
 
     public void setSource_explain(String source_explain) {
         this.source_explain = source_explain;
+    }
+
+    public Integer getLikes() {
+        return likes;
+    }
+
+    public void setLikes(Integer likes) {
+        this.likes = likes;
     }
 }

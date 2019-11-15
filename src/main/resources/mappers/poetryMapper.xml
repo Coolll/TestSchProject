@@ -4,8 +4,9 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wql.poetry.dao.PoetryDao">
 
+    <!--新增诗词-->
     <insert id="insertPoetry" parameterType="com.wql.poetry.model.PoetryEntity" useGeneratedKeys="true" keyProperty="poetry_id" keyColumn="poetry_id">
-        insert into poetry_table(poetry_id,name, author, content, addition_info, class_info,class_info_explain, main_class,main_class_explain, source,source_explain, transfer_info, default_image_id)
+        insert into poetry_table(poetry_id,name, author, content, addition_info, class_info,class_info_explain, main_class,main_class_explain, source,source_explain, transfer_info,likes)
         values (
         #{poetry_id,jdbcType=INTEGER},
         #{name,jdbcType=CHAR},
@@ -19,10 +20,47 @@
         #{source,jdbcType=CHAR},
         #{source_explain,jdbcType=CHAR},
         #{transfer_info,jdbcType=CHAR},
-        #{default_image_id,jdbcType=INTEGER}
+        #{likes,jdbcType=INTEGER}
         )
     </insert>
 
+    <!--首页的热门诗词-->
+    <select id="findHotPoetry" resultType="com.wql.poetry.model.PoetryEntity">
+        select * from poetry_table
+        where 1=1
+        order by likes desc
+        limit #{from_index},#{count}
+    </select>
 
+    <!--搜索收藏的诗词-->
+    <select id="findLikePoetry" resultType="com.wql.poetry.model.LikePoetryEntity">
+        select * from like_poetry_table
+        where user_id=#{user_id} and poetry_id=#{poetry_id}
+        limit 1
+    </select>
+
+
+    <!--收藏诗词-->
+    <insert id="likePoetry" parameterType="com.wql.poetry.model.LikePoetryEntity" useGeneratedKeys="true" keyProperty="like_id" keyColumn="like_id">
+
+        insert into like_poetry_table(user_id, poetry_id, create_time)
+        values (
+        #{user_id,jdbcType=INTEGER},
+        #{poetry_id,jdbcType=INTEGER},
+        #{create_time,jdbcType=CHAR}
+        )
+    </insert>
+
+    <!--取消收藏诗词-->
+    <delete id="dislikePoetry" parameterType="int">
+        delete from like_poetry_table
+        where
+        user_id=#{user_id} and poetry_id=#{poetry_id}
+    </delete>
+
+    <!--获取到全部的诗词总配置-->
+    <select id="findAllPoetryConfigure" resultType="com.wql.poetry.model.PoetryConfigureEntity">
+        select * from poetry_configure_table
+    </select>
 
 </mapper>

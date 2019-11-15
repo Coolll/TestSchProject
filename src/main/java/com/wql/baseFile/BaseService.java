@@ -1,5 +1,8 @@
 package com.wql.baseFile;
 
+import com.alibaba.fastjson.JSON;
+import com.wql.utils.security.AESHelper;
+import com.wql.utils.security.RSAUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -20,4 +23,24 @@ public class BaseService {
         logger.error(errorStr);
 
     }
+
+    //进行验签
+    public boolean checkIdentity(BaseParam param){
+        //原始文本为 com=bianla&timestamp=时间戳
+        //时间戳由前端发送过来
+        String finalString = "com=wql&timestamp="+param.getTimestamp();
+        System.out.println("签名："+param.getSignature());
+        String sign = param.getSignature();
+        System.out.println("param:"+param.getEncryptedData());
+        boolean success = RSAUtil.verifyIdentify(finalString,sign);
+        return success;
+    }
+
+    // AES加密数据直接解析成对象
+    public <T> T decryptedAESDataToEntity(BaseParam param , Class<T> clazz) {
+
+        String dataStr = AESHelper.decryptString(param.getEncryptedData());
+        return JSON.parseObject(dataStr,clazz);
+    }
+
 }

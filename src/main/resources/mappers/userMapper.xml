@@ -4,8 +4,9 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wql.user.dao.UserDao">
 
+    <!--新增用户-->
     <insert id="insertUser" parameterType="com.wql.user.model.UserEntity" useGeneratedKeys="true" keyProperty="user_id" keyColumn="user_id">
-        insert into user_table(nick_name, password, user_poetry_class, poetry_storage, email, create_time, last_login_time, last_loginout_time)
+        insert into user_table(nick_name, password, user_poetry_class, poetry_storage, email, create_time, last_login_time, last_loginout_time,user_token,head_image)
         values (
                 #{nick_name,jdbcType=CHAR},
                 #{password,jdbcType=CHAR},
@@ -14,10 +15,14 @@
                 #{email,jdbcType=CHAR},
                 #{create_time,jdbcType=CHAR},
                 #{last_login_time,jdbcType=CHAR},
-                #{last_loginout_time,jdbcType=CHAR}
+                #{last_loginout_time,jdbcType=CHAR},
+                #{user_token,jdbcType=CHAR},
+                #{head_image,jdbcType=CHAR}
+
         )
     </insert>
 
+    <!--更新用户信息-->
     <update id="updateUser" parameterType="com.wql.user.model.UserEntity">
         update user_table
         set
@@ -29,24 +34,74 @@
         <if test="email != null">,email = #{email}</if>
         <if test="last_login_time != null">,last_login_time = #{last_login_time}</if>
         <if test="last_loginout_time != null">,last_loginout_time=#{last_loginout_time}</if>
+        <if test="user_token != null">,user_token=#{user_token}</if>
+        <if test="head_image != null">,head_image=#{head_image}</if>
         where user_id=#{user_id}
     </update>
 
+    <!--根据昵称查找用户-->
     <select id="findUser" resultType="com.wql.user.model.UserEntity">
         select * from user_table
         <where>
-            <if test="nick_name != null and nick_name != ''"> nick_name = #{nick_name}</if>>
+            <if test="nick_name != null and nick_name != ''"> nick_name = #{nick_name}</if>
         </where>
     </select>
 
+    <!--根据昵称以及UserID查找用户-->
     <select id="findUserInfo" resultType="com.wql.user.model.UserEntity">
         select * from user_table
         <where>
-            <if test="nick_name != null and nick_name != ''"> nick_name = #{nick_name}</if>
-            <if test="user_id != 0 and user_id != null">and user_id=#{user_id}</if>
+            1=1
+            <if test="nick_name != null and nick_name != ''">and nick_name = #{nick_name}</if>
+            <if test="user_id != null and user_id != 0">and user_id=#{user_id}</if>
 
         </where>
     </select>
+
+    <!--查找用户的收藏列表-->
+    <select id="findUserLikeList" resultType="java.lang.Integer">
+        select poetry_id from like_poetry_table
+        where user_id = #{user_id}
+    </select>
+
+    <!--查找用户的收藏列表-->
+    <select id="findUserCollectionList" resultMap="CollectionMap">
+        select *
+        from like_poetry_table lt
+        left join
+        poetry_table pt
+        on lt.poetry_id = pt.poetry_id
+        where
+        lt.user_id = #{user_id}
+
+        order by lt.poetry_id desc
+        limit #{from_index},#{count}
+    </select>
+
+    <resultMap id="CollectionMap" type="com.wql.poetry.model.CollectionEntity">
+        <result column="user_id" property="user_id"/>
+        <result column="poetry_id" property="poetry_id"/>
+
+        <association property="poetryEntity" javaType="com.wql.poetry.model.PoetryEntity">
+
+
+            <result column="poetry_id" property="poetry_id"/>
+            <result column="name" property="name"/>
+            <result column="author" property="author"/>
+            <result column="content" property="content"/>
+            <result column="addition_info" property="addition_info"/>
+            <result column="class_info" property="class_info"/>
+            <result column="class_info_explain" property="class_info_explain"/>
+            <result column="main_class" property="main_class"/>
+            <result column="main_class_explain" property="main_class_explain"/>
+            <result column="source" property="source"/>
+            <result column="source_explain" property="source_explain"/>
+            <result column="transfer_info" property="transfer_info"/>
+            <result column="likes" property="likes"/>
+            <result column="text_color" property="text_color"/>
+
+        </association>
+    </resultMap>
 
 
 </mapper>

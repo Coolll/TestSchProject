@@ -1,8 +1,11 @@
 package com.wql.controllers;
 
 import com.wql.poetry.model.PoetryEntity;
-import com.wql.poetry.param.LoginParam;
+import com.wql.user.param.LikePoetryParam;
+import com.wql.user.param.LoginParam;
 import com.wql.user.model.UserEntity;
+import com.wql.user.param.LogoutParam;
+import com.wql.user.param.PoetryCollectionParam;
 import com.wql.user.service.UserService;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,9 +18,28 @@ public class UserController {
 
     //登录与注册
     @RequestMapping(value = "api/user/loginAndRegister",method = RequestMethod.POST)
-    public Object insertPoetry(@RequestBody LoginParam param){
+    public Object loginAndRegister(@RequestBody LoginParam param){
 
-        return service.loginAndRegister(param.getNickName(),param.getPassword());
+        return service.loginAndRegister(param);
+    }
+    //退出登录
+    @RequestMapping(value = "api/user/logout",method = RequestMethod.POST)
+    public Object loginOut(@RequestBody LogoutParam param){
+
+        return service.logoutAction(param);
     }
 
+    //获取全部的收藏（仅id）
+    @RequestMapping(value = "api/user/allLikesList",method = RequestMethod.POST)
+    public Object allLikesList(@RequestBody LikePoetryParam param){
+
+        return service.loadUserLikePoetry(param);
+    }
+
+    //获取全部的收藏（包含诗词）
+    @RequestMapping(value = "api/user/loadCollectionList",method = RequestMethod.POST)
+    public Object allCollectionsList(@RequestBody PoetryCollectionParam param){
+
+        return service.loadUserLikePoetryEntity(param);
+    }
 }

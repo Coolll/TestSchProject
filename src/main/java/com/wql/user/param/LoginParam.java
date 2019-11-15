@@ -1,6 +1,8 @@
-package com.wql.poetry.param;
+package com.wql.user.param;
 
-public class LoginParam {
+import com.wql.baseFile.BaseParam;
+
+public class LoginParam extends BaseParam {
     private String nickName;
     private String password;
 

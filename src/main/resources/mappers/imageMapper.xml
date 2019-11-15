@@ -11,4 +11,8 @@
         )
     </insert>
 
+    <select id="findAllImages" resultType="com.wql.poetry.model.ImageEntity">
+        select * from bgImage_table
+
+    </select>
 </mapper>
