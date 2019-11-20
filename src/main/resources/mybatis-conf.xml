@@ -79,6 +79,8 @@
         <mapper resource="mappers/poetryMapper.xml"/>
         <mapper resource="mappers/imageMapper.xml"/>
         <mapper resource="mappers/userMapper.xml"/>
+        <mapper resource="mappers/challengeMapper.xml"/>
+        <mapper resource="mappers/feedbackMapper.xml"/>
 
     </mappers>
 

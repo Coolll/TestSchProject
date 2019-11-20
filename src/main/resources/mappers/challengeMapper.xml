@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wql.user.dao.ChallengeDao">
+    <!--新增挑战-->
+    <insert id="insertChallenge" parameterType="com.wql.user.model.ChallengeEntity" useGeneratedKeys="true" keyProperty="challenge_id" keyColumn="challenge_id">
+        insert into challenge_table(user_id, storage, poetry_class, challenge_time)
+        values (
+        #{user_id,jdbcType=INTEGER},
+        #{storage,jdbcType=INTEGER},
+        #{poetry_class,jdbcType=INTEGER},
+        #{challenge_time,jdbcType=CHAR}
+        )
+    </insert>
+
+
+    <!--搜索某个人的挑战记录-->
+    <select id="findChallengeWithUserID" resultType="com.wql.user.model.ChallengeEntity">
+        select * from challenge_table
+        where user_id=#{user_id}
+        order by challenge_id asc
+        limit #{from_index},#{count}
+     </select>
+</mapper>

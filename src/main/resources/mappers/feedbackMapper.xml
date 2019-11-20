@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wql.feedback.dao.FeedbackDao">
+    <!--新增反馈-->
+    <insert id="insertFeedback" parameterType="com.wql.feedback.model.FeedbackEntity" useGeneratedKeys="true" keyProperty="feedback_id" keyColumn="feedback_id">
+        insert into feedback_table(user_id, content, contact, create_time)
+        values (
+        #{user_id,jdbcType=INTEGER},
+        #{content,jdbcType=CHAR},
+        #{contact,jdbcType=CHAR},
+        #{create_time,jdbcType=CHAR}
+        )
+    </insert>
+</mapper>

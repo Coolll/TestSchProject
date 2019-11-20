@@ -25,8 +25,12 @@
     </insert>
 
     <!--首页的热门诗词-->
-    <select id="findHotPoetry" resultType="com.wql.poetry.model.PoetryEntity">
-        select * from poetry_table
+    <select id="findHotPoetry" resultMap="PoetryDetailMap">
+        select * from
+        poetry_table pt
+        left join
+        bgImage_table bt
+        on pt.class_info = bt.class_info
         where 1=1
         order by likes desc
         limit #{from_index},#{count}
@@ -61,6 +65,67 @@
     <!--获取到全部的诗词总配置-->
     <select id="findAllPoetryConfigure" resultType="com.wql.poetry.model.PoetryConfigureEntity">
         select * from poetry_configure_table
+    </select>
+
+
+    <!--获取到对应主分类的全部诗词-->
+    <select id="findPoetryWithMainClass" resultMap="PoetryDetailMap">
+        select * from
+        poetry_table pt
+        left join
+        bgImage_table bt
+        on pt.class_info = bt.class_info
+        where pt.main_class = #{main_class}
+        order by pt.poetry_id desc
+    </select>
+
+
+    <resultMap id="PoetryDetailMap" type="com.wql.poetry.model.PoetryDetailEntity">
+
+
+        <result column="poetry_id" property="poetry_id"/>
+        <result column="name" property="name"/>
+        <result column="author" property="author"/>
+        <result column="content" property="content"/>
+        <result column="addition_info" property="addition_info"/>
+        <result column="class_info" property="class_info"/>
+        <result column="main_class" property="main_class"/>
+        <result column="source" property="source"/>
+        <result column="source_explain" property="source_explain"/>
+        <result column="transfer_info" property="transfer_info"/>
+        <result column="likes" property="likes"/>
+        <result column="text_color" property="text_color"/>
+
+        <association property="imageEntity" javaType="com.wql.poetry.model.ImageEntity">
+            <result column="image_url" property="image_url"/>
+            <result column="class_info" property="class_info"/>
+        </association>
+    </resultMap>
+
+
+    <!--获取到对应主分类的全部诗词-->
+    <select id="findPoetryWithKeyword" resultMap="PoetryDetailMap">
+        select * from
+        poetry_table pt
+        left join
+        bgImage_table bt
+        on pt.class_info = bt.class_info
+        <where>
+            pt.name like CONCAT('%',#{keyword},'%')
+            or pt.author like CONCAT('%',#{keyword},'%')
+            or pt.content like CONCAT('%',#{keyword},'%')
+        </where>
+        order by pt.poetry_id desc
+    </select>
+
+
+    <!--根据poetry_id 和 count来搜索诗词-->
+    <select id="findPoetryWithLimit" resultType="com.wql.poetry.model.PoetrySimpleEntity">
+        select name,author,content from
+        poetry_table
+        where poetry_id >= #{poetry_id}
+        order by poetry_id asc
+        limit #{from_index},#{count}
     </select>
 
 </mapper>

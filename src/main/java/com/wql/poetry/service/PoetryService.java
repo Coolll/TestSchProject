@@ -4,20 +4,22 @@ import com.wql.baseFile.BaseParam;
 import com.wql.baseFile.BaseService;
 import com.wql.poetry.dao.ImageDao;
 import com.wql.poetry.dao.PoetryDao;
-import com.wql.poetry.model.ImageEntity;
-import com.wql.poetry.model.LikePoetryEntity;
-import com.wql.poetry.model.PoetryConfigureEntity;
-import com.wql.poetry.model.PoetryEntity;
+import com.wql.poetry.model.*;
 import com.wql.poetry.param.AllBgImagesParam;
 import com.wql.poetry.param.HotPoetryParam;
 import com.wql.poetry.param.LikeOrDislikeParam;
+import com.wql.poetry.param.MainClassParam;
 import com.wql.utils.publicUtils.PublicUtil;
 import com.wql.utils.result.CodeMsg;
 import com.wql.utils.result.Result;
 import org.apache.ibatis.session.SqlSession;
 import com.wql.utils.publicUtils.myBatisUtil;
 
+import java.lang.reflect.MalformedParameterizedTypeException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 public class PoetryService extends BaseService {
 
@@ -82,9 +84,17 @@ public class PoetryService extends BaseService {
 
         try {
             //查询热门诗词
-            List<PoetryEntity> poetryEntityList = dao.findHotPoetry(decryptedParam.getFrom_index(),decryptedParam.getCount());
+            List<PoetryDetailEntity> poetryEntityList = dao.findHotPoetry(decryptedParam.getFrom_index(),decryptedParam.getCount());
+
+            List<PoetryBackEntity> backList = new ArrayList();
+            for (PoetryDetailEntity entity:poetryEntityList){
+                PoetryBackEntity backEntity = new PoetryBackEntity(entity);
+                backList.add(backEntity);
+            }
+
             session.commit();
-            return Result.success(poetryEntityList);
+            return Result.success(backList);
+
         }catch (Exception e){
             StackTraceElement element = Thread.currentThread().getStackTrace()[1];
             dealException(e,element.getFileName(),element.getLineNumber());
@@ -191,7 +201,6 @@ public class PoetryService extends BaseService {
             return Result.error(CodeMsg.VERIFY_FAILED);
         }
 
-        BaseParam decryptedParam = this.decryptedAESDataToEntity(param,BaseParam.class);
         SqlSession session = myBatisUtil.openPoetrySqlFactory().openSession();
         PoetryDao dao = session.getMapper(PoetryDao.class);
 
@@ -215,6 +224,127 @@ public class PoetryService extends BaseService {
 
 
 
+    //根据主分类来获取对应的诗词
+    public Object loadPoetryWithParam(MainClassParam param){
+
+        boolean verifySuccess = this.checkIdentity(param);
+        if (!verifySuccess){
+            logger.error("身份校验失败");
+            return Result.error(CodeMsg.VERIFY_FAILED);
+        }
+
+        MainClassParam decryptedParam = this.decryptedAESDataToEntity(param,MainClassParam.class);
+        SqlSession session = myBatisUtil.openPoetrySqlFactory().openSession();
+        PoetryDao dao = session.getMapper(PoetryDao.class);
+
+        try {
+            //查询热门诗词
+            List<PoetryDetailEntity> poetryEntityList = dao.findPoetryWithMainClass(decryptedParam.getMain_class());
+
+            List<PoetryBackEntity> backList = new ArrayList();
+            for (PoetryDetailEntity entity:poetryEntityList){
+                PoetryBackEntity backEntity = new PoetryBackEntity(entity);
+                backList.add(backEntity);
+            }
+
+            session.commit();
+            return Result.success(backList);
+        }catch (Exception e){
+            StackTraceElement element = Thread.currentThread().getStackTrace()[1];
+            dealException(e,element.getFileName(),element.getLineNumber());
+            session.rollback();
+            return Result.error(CodeMsg.SERVER_EXCEPTION,"获取诗词失败");
+        }finally {
+            if (session != null){
+                session.close();
+            }
+        }
+
+    }
+
+
+    //根据关键词来获取对应的诗词
+    public Object loadPoetryWithKeyword(SearchPoetryParam param){
+
+        boolean verifySuccess = this.checkIdentity(param);
+        if (!verifySuccess){
+            logger.error("身份校验失败");
+            return Result.error(CodeMsg.VERIFY_FAILED);
+        }
+
+        SearchPoetryParam decryptedParam = this.decryptedAESDataToEntity(param,SearchPoetryParam.class);
+        SqlSession session = myBatisUtil.openPoetrySqlFactory().openSession();
+        PoetryDao dao = session.getMapper(PoetryDao.class);
+
+        try {
+            //查询热门诗词
+            List<PoetryDetailEntity> poetryEntityList = dao.findPoetryWithKeyword(decryptedParam.getKeyword());
+
+            List<PoetryBackEntity> backList = new ArrayList();
+            for (PoetryDetailEntity entity:poetryEntityList){
+                PoetryBackEntity backEntity = new PoetryBackEntity(entity);
+                backList.add(backEntity);
+            }
+
+            session.commit();
+            return Result.success(backList);
+        }catch (Exception e){
+            StackTraceElement element = Thread.currentThread().getStackTrace()[1];
+            dealException(e,element.getFileName(),element.getLineNumber());
+            session.rollback();
+            return Result.error(CodeMsg.SERVER_EXCEPTION,"搜索诗词失败");
+        }finally {
+            if (session != null){
+                session.close();
+            }
+        }
+
+    }
+
+    //获取评测的诗词
+    public Object loadEvaluatePoetry(BaseParam param){
+
+        boolean verifySuccess = this.checkIdentity(param);
+        if (!verifySuccess){
+            logger.error("身份校验失败");
+            return Result.error(CodeMsg.VERIFY_FAILED);
+        }
+
+        SqlSession session = myBatisUtil.openPoetrySqlFactory().openSession();
+        PoetryDao dao = session.getMapper(PoetryDao.class);
+
+        try {
+            //查询诗词
+            //1000-5999 简单
+            //6000-10000 一般
+            //10000-无限大 困难
+            Random random = new Random();
+            int easyRandom = random.nextInt(34);
+            int generalRandom = random.nextInt(82);
+            int difficultRandom = random.nextInt(500);
+            List<PoetrySimpleEntity> easyList = dao.findPoetryWithLimit(1000,easyRandom,12);
+            List<PoetrySimpleEntity> generalList = dao.findPoetryWithLimit(6000,generalRandom,12);
+            List<PoetrySimpleEntity> difficultList = dao.findPoetryWithLimit(10000,difficultRandom,12);
+
+            HashMap map = new HashMap();
+            map.put("easy",easyList);
+            map.put("general",generalList);
+            map.put("difficult",difficultList);
+
+            session.commit();
+            return Result.success(map);
+        }catch (Exception e){
+            StackTraceElement element = Thread.currentThread().getStackTrace()[1];
+            dealException(e,element.getFileName(),element.getLineNumber());
+            session.rollback();
+            return Result.error(CodeMsg.SERVER_EXCEPTION,"搜索诗词失败");
+        }finally {
+            if (session != null){
+                session.close();
+            }
+        }
+
+    }
 
 
 }

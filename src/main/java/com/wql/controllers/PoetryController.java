@@ -3,9 +3,11 @@ package com.wql.controllers;
 import com.wql.baseFile.BaseParam;
 import com.wql.poetry.model.ImageEntity;
 import com.wql.poetry.model.PoetryEntity;
+import com.wql.poetry.model.SearchPoetryParam;
 import com.wql.poetry.param.AllBgImagesParam;
 import com.wql.poetry.param.HotPoetryParam;
 import com.wql.poetry.param.LikeOrDislikeParam;
+import com.wql.poetry.param.MainClassParam;
 import com.wql.poetry.service.PoetryService;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -49,13 +51,28 @@ public class PoetryController {
         return service.loadAllImages(param);
     }
 
-
     //获取全部的诗词配置
     @RequestMapping(value = "api/poetry/loadPoetryConfigure",method = RequestMethod.POST)
     public Object loadAllPoetryConfigure(@RequestBody BaseParam param){
         return service.loadAllPoetryConfigure(param);
     }
 
+    //根据mainClass获取对应的诗词
+    @RequestMapping(value = "api/poetry/loadPoetryWithMainClass",method = RequestMethod.POST)
+    public Object loadPoetryWithMainClass(@RequestBody MainClassParam param){
+        return service.loadPoetryWithParam(param);
+    }
 
+    //根据关键词获取对应的诗词
+    @RequestMapping(value = "api/poetry/loadPoetryWithKeyword",method = RequestMethod.POST)
+    public Object loadPoetryWithKeyword(@RequestBody SearchPoetryParam param){
+        return service.loadPoetryWithKeyword(param);
+    }
+
+    //获取评测的诗词
+    @RequestMapping(value = "api/poetry/loadEvaluatePoetry",method = RequestMethod.POST)
+    public Object loadEvaluatePoetry(@RequestBody BaseParam param){
+        return service.loadEvaluatePoetry(param);
+    }
 }
 

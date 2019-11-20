@@ -1,11 +1,8 @@
 package com.wql.controllers;
 
 import com.wql.poetry.model.PoetryEntity;
-import com.wql.user.param.LikePoetryParam;
-import com.wql.user.param.LoginParam;
+import com.wql.user.param.*;
 import com.wql.user.model.UserEntity;
-import com.wql.user.param.LogoutParam;
-import com.wql.user.param.PoetryCollectionParam;
 import com.wql.user.service.UserService;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,4 +39,20 @@ public class UserController {
 
         return service.loadUserLikePoetryEntity(param);
     }
+
+    //新增一条挑战记录
+    @RequestMapping(value = "api/user/insertChallengeRecord",method = RequestMethod.POST)
+    public Object insertChallengeRecord(@RequestBody AddChallengeParam param){
+
+        return service.insertChallengeRecord(param);
+    }
+
+    //获取某个人的近期挑战（默认最近的10次）
+    @RequestMapping(value = "api/user/loadUserChallenges",method = RequestMethod.POST)
+    public Object loadUserChallenges(@RequestBody UserChallengeParam param){
+
+        return service.loadUserChallenge(param);
+    }
+
+
 }

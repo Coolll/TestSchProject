@@ -3,12 +3,11 @@ package com.wql.user.service;
 import com.wql.baseFile.BaseService;
 import com.wql.poetry.dao.PoetryDao;
 import com.wql.poetry.model.CollectionEntity;
-import com.wql.user.param.LikePoetryParam;
+import com.wql.user.dao.ChallengeDao;
+import com.wql.user.model.ChallengeEntity;
+import com.wql.user.param.*;
 import com.wql.user.dao.UserDao;
 import com.wql.user.model.UserEntity;
-import com.wql.user.param.LoginParam;
-import com.wql.user.param.LogoutParam;
-import com.wql.user.param.PoetryCollectionParam;
 import com.wql.utils.publicUtils.PublicUtil;
 import com.wql.utils.publicUtils.myBatisUtil;
 import com.wql.utils.result.CodeMsg;
@@ -187,6 +186,85 @@ public class UserService extends BaseService {
             dealException(e,element.getFileName(),element.getLineNumber());
             session.rollback();
             return Result.error(CodeMsg.SERVER_EXCEPTION,"退出失败");
+        }finally {
+            if (session != null){
+                session.close();
+            }
+        }
+
+    }
+
+
+    //添加一条挑战记录
+    public Object insertChallengeRecord(AddChallengeParam param){
+
+        boolean verifySuccess = this.checkIdentity(param);
+        if (!verifySuccess){
+            logger.error("身份校验失败");
+            return Result.error(CodeMsg.VERIFY_FAILED);
+        }
+
+        AddChallengeParam decryptedParam = this.decryptedAESDataToEntity(param,AddChallengeParam.class);
+        SqlSession session = myBatisUtil.openPoetrySqlFactory().openSession();
+        ChallengeDao dao = session.getMapper(ChallengeDao.class);
+
+        try {
+            ChallengeEntity entity = new ChallengeEntity();
+            Integer storage = decryptedParam.getStorage();
+            Integer poetryClass = 0;
+            if (storage < 200){ poetryClass = 0; }
+            else if (storage < 700){ poetryClass = 1;}
+            else if (storage < 1300){ poetryClass = 2;}
+            else if (storage < 2000){ poetryClass = 3;}
+            else if (storage < 2800){ poetryClass = 4;}
+            else if (storage < 3700){ poetryClass = 5;}
+            else if (storage < 4500){ poetryClass = 6;}
+            else { poetryClass = 7;}
+
+            entity.setUser_id(decryptedParam.getUser_id());
+            entity.setPoetry_class(poetryClass);
+            entity.setStorage(decryptedParam.getStorage());
+            entity.setChallenge_time(PublicUtil.loadBeijingTime());
+
+            dao.insertChallenge(entity);
+            session.commit();
+            return Result.success(entity);
+        }catch (Exception e){
+            StackTraceElement element = Thread.currentThread().getStackTrace()[1];
+            dealException(e,element.getFileName(),element.getLineNumber());
+            session.rollback();
+            return Result.error(CodeMsg.SERVER_EXCEPTION,"创建挑战记录失败");
+        }finally {
+            if (session != null){
+                session.close();
+            }
+        }
+
+    }
+
+
+    //获取用户的近期挑战记录（10条）
+    public Object loadUserChallenge(UserChallengeParam param){
+
+        boolean verifySuccess = this.checkIdentity(param);
+        if (!verifySuccess){
+            logger.error("身份校验失败");
+            return Result.error(CodeMsg.VERIFY_FAILED);
+        }
+
+        UserChallengeParam decryptedParam = this.decryptedAESDataToEntity(param,UserChallengeParam.class);
+        SqlSession session = myBatisUtil.openPoetrySqlFactory().openSession();
+        ChallengeDao dao = session.getMapper(ChallengeDao.class);
+
+        try {
+            List<ChallengeEntity> list = dao.findChallengeWithUserID(decryptedParam.getUser_id(),0,10);
+            session.commit();
+            return Result.success(list);
+        }catch (Exception e){
+            StackTraceElement element = Thread.currentThread().getStackTrace()[1];
+            dealException(e,element.getFileName(),element.getLineNumber());
+            session.rollback();
+            return Result.error(CodeMsg.SERVER_EXCEPTION,"获取挑战记录失败");
         }finally {
             if (session != null){
                 session.close();
