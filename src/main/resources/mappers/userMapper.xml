@@ -6,7 +6,7 @@
 
     <!--新增用户-->
     <insert id="insertUser" parameterType="com.wql.user.model.UserEntity" useGeneratedKeys="true" keyProperty="user_id" keyColumn="user_id">
-        insert into user_table(nick_name, password, user_poetry_class, poetry_storage, email, create_time, last_login_time, last_loginout_time,user_token,head_image)
+        insert into user_table(nick_name, password, user_poetry_class, poetry_storage, email, create_time, last_login_time, last_logout_time,last_update_time,user_token,head_image)
         values (
                 #{nick_name,jdbcType=CHAR},
                 #{password,jdbcType=CHAR},
@@ -15,7 +15,8 @@
                 #{email,jdbcType=CHAR},
                 #{create_time,jdbcType=CHAR},
                 #{last_login_time,jdbcType=CHAR},
-                #{last_loginout_time,jdbcType=CHAR},
+                #{last_logout_time,jdbcType=CHAR},
+                #{last_update_time,jdbcType=CHAR},
                 #{user_token,jdbcType=CHAR},
                 #{head_image,jdbcType=CHAR}
 
@@ -33,7 +34,8 @@
         <if test="poetry_storage != null">,poetry_storage = #{poetry_storage}</if>
         <if test="email != null">,email = #{email}</if>
         <if test="last_login_time != null">,last_login_time = #{last_login_time}</if>
-        <if test="last_loginout_time != null">,last_loginout_time=#{last_loginout_time}</if>
+        <if test="last_logout_time != null">,last_logout_time=#{last_logout_time}</if>
+        <if test="last_update_time != null">,last_update_time=#{last_update_time}</if>
         <if test="user_token != null">,user_token=#{user_token}</if>
         <if test="head_image != null">,head_image=#{head_image}</if>
         where user_id=#{user_id}
@@ -62,6 +64,7 @@
     <select id="findUserLikeList" resultType="java.lang.Integer">
         select poetry_id from like_poetry_table
         where user_id = #{user_id}
+        order by poetry_id asc
     </select>
 
     <!--查找用户的收藏列表-->

@@ -109,6 +109,14 @@ public class UserService extends BaseService {
 
         try {
             List<Integer> list = dao.findUserLikeList(decryptedParam.getUser_id());
+
+            //更新用户的操作
+            UserDao userDao = session.getMapper(UserDao.class);
+            UserEntity userEntity = userDao.findUserInfo(null,decryptedParam.getUser_id());
+            if (userEntity != null){
+                userEntity.setLast_update_time(PublicUtil.loadBeijingTime());
+                userDao.updateUser(userEntity);
+            }
             session.commit();
             return Result.success(list);
         }catch (Exception e){
@@ -171,7 +179,7 @@ public class UserService extends BaseService {
             UserEntity entity = dao.findUserInfo(null,decryptedParam.getUser_id());
             if (entity != null){
                 //用户存在，则把token清理掉，更新一下退出时间
-                entity.setLast_loginout_time(PublicUtil.loadBeijingTime());
+                entity.setLast_logout_time(PublicUtil.loadBeijingTime());
                 entity.setUser_token("");
                 dao.updateUser(entity);
 
@@ -227,6 +235,15 @@ public class UserService extends BaseService {
             entity.setChallenge_time(PublicUtil.loadBeijingTime());
 
             dao.insertChallenge(entity);
+
+            UserDao userDao = session.getMapper(UserDao.class);
+            UserEntity userEntity = userDao.findUserInfo(null,decryptedParam.getUser_id());
+            if (userEntity != null){
+                userEntity.setPoetry_storage(decryptedParam.getStorage().toString());
+                userEntity.setUser_poetry_class(poetryClass.toString());
+                userEntity.setLast_update_time(PublicUtil.loadBeijingTime());
+                userDao.updateUser(userEntity);
+            }
             session.commit();
             return Result.success(entity);
         }catch (Exception e){

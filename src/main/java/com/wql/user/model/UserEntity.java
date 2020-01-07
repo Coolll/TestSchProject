@@ -9,9 +9,11 @@ public class UserEntity {
     private String email;
     private String create_time;
     private String last_login_time;
-    private String last_loginout_time;
+    private String last_logout_time;
+    private String last_update_time;
     private String user_token;
     private String head_image;
+
 
     public String getHead_image() {
         return head_image;
@@ -85,14 +87,6 @@ public class UserEntity {
         this.last_login_time = last_login_time;
     }
 
-    public String getLast_loginout_time() {
-        return last_loginout_time;
-    }
-
-    public void setLast_loginout_time(String last_loginout_time) {
-        this.last_loginout_time = last_loginout_time;
-    }
-
     public String getUser_token() {
         return user_token;
     }
@@ -100,4 +94,21 @@ public class UserEntity {
     public void setUser_token(String user_token) {
         this.user_token = user_token;
     }
+
+    public String getLast_logout_time() {
+        return last_logout_time;
+    }
+
+    public void setLast_logout_time(String last_logout_time) {
+        this.last_logout_time = last_logout_time;
+    }
+
+    public String getLast_update_time() {
+        return last_update_time;
+    }
+
+    public void setLast_update_time(String last_update_time) {
+        this.last_update_time = last_update_time;
+    }
+
 }
