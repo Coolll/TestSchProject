@@ -99,12 +99,16 @@
         <association property="imageEntity" javaType="com.wql.poetry.model.ImageEntity">
             <result column="image_url" property="image_url"/>
             <result column="class_info" property="class_info"/>
+            <result column="image_base_url" property="image_base_url"/>
+            <result column="thumb_url" property="thumb_url"/>
+            <result column="origin_url" property="origin_url"/>
+
         </association>
     </resultMap>
 
 
     <!--获取到对应主分类的全部诗词-->
-    <select id="findPoetryWithKeyword" resultMap="PoetryDetailMap">
+    <select id="findPoetryWithKeywordAndPage" resultMap="PoetryDetailMap">
         select * from
         poetry_table pt
         left join
@@ -116,6 +120,7 @@
             or pt.content like CONCAT('%',#{keyword},'%')
         </where>
         order by pt.poetry_id desc
+        limit #{from_index},#{count}
     </select>
 
 

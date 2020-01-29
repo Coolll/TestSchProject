@@ -39,6 +39,12 @@ public class PoetryController {
         return service.loadHotPoetry(param);
     }
 
+    //获取首页的题画背景图
+    @RequestMapping(value = "api/poetry/loadHomeTopImage",method = RequestMethod.POST)
+    public Object loadHomeTopImage(@RequestBody BaseParam param){
+        return service.loadHomeTopImage(param);
+    }
+
     //喜欢诗词/不喜欢诗词
     @RequestMapping(value = "api/poetry/likeOrDislikePoetry",method = RequestMethod.POST)
     public Object likePoetryOrNot(@RequestBody LikeOrDislikeParam param){

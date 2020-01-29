@@ -13,6 +13,12 @@
 
     <select id="findAllImages" resultType="com.wql.poetry.model.ImageEntity">
         select * from bgImage_table
-
+        where image_id > 9999
     </select>
+
+    <select id="findHomeTopImage" resultType="com.wql.poetry.model.ImageEntity">
+        select * from bgImage_table
+        where class_info = 0
+    </select>
+
 </mapper>

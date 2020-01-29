@@ -69,6 +69,33 @@ public class PoetryService extends BaseService {
         return "";
     }
 
+    public Object loadHomeTopImage(BaseParam param){
+        boolean verifySuccess = this.checkIdentity(param);
+        if (!verifySuccess){
+            logger.error("身份校验失败");
+            return Result.error(CodeMsg.VERIFY_FAILED);
+        }
+
+        SqlSession session = myBatisUtil.openPoetrySqlFactory().openSession();
+        ImageDao dao = session.getMapper(ImageDao.class);
+
+        try {
+            //查询热门诗词
+            List<ImageEntity> imageEntityList = dao.findHomeTopImage();
+            session.commit();
+            return Result.success(imageEntityList);
+
+        }catch (Exception e){
+            StackTraceElement element = Thread.currentThread().getStackTrace()[1];
+            dealException(e,element.getFileName(),element.getLineNumber());
+            session.rollback();
+            return Result.error(CodeMsg.SERVER_EXCEPTION,"插入诗词失败");
+        }finally {
+            if (session != null){
+                session.close();
+            }
+        }
+    }
     //获取首页的热门诗词
     public Object loadHotPoetry(HotPoetryParam param){
 
@@ -91,7 +118,6 @@ public class PoetryService extends BaseService {
                 PoetryBackEntity backEntity = new PoetryBackEntity(entity);
                 backList.add(backEntity);
             }
-
             session.commit();
             return Result.success(backList);
 
@@ -278,7 +304,7 @@ public class PoetryService extends BaseService {
 
         try {
             //查询热门诗词
-            List<PoetryDetailEntity> poetryEntityList = dao.findPoetryWithKeyword(decryptedParam.getKeyword());
+            List<PoetryDetailEntity> poetryEntityList = dao.findPoetryWithKeywordAndPage(decryptedParam.getKeyword(),10*decryptedParam.getPage(),10);
 
             List<PoetryBackEntity> backList = new ArrayList();
             for (PoetryDetailEntity entity:poetryEntityList){

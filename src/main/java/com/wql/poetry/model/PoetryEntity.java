@@ -14,13 +14,13 @@ public class PoetryEntity {
     private String source_explain;
     private String transfer_info;
     private Integer likes;
-    private Integer text_color;//0为默认色 1为白色
+    private String text_color;//r,g,b,alpha
 
-    public Integer getText_color() {
+    public String getText_color() {
         return text_color;
     }
 
-    public void setText_color(Integer text_color) {
+    public void setText_color(String text_color) {
         this.text_color = text_color;
     }
 

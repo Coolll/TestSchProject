@@ -9,5 +9,6 @@ public interface ImageDao {
 
     public List<ImageEntity> findAllImages();
 
+    public List<ImageEntity> findHomeTopImage();
 
 }

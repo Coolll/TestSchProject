@@ -33,7 +33,9 @@ public interface PoetryDao {
     public List<PoetryDetailEntity> findPoetryWithMainClass(@Param("main_class")String mainClass);
 
     //根据关键词搜索诗词
-    public List<PoetryDetailEntity> findPoetryWithKeyword(@Param("keyword")String keyword);
+    public List<PoetryDetailEntity> findPoetryWithKeywordAndPage(@Param("keyword")String keyword,
+                                                                 @Param("from_index")Integer from,
+                                                                 @Param("count")Integer count);
 
     //根据poetry的ID 和count搜索部分诗词，这里搜索的诗词只包含内。用于测评时获取
     public List<PoetrySimpleEntity> findPoetryWithLimit(@Param("poetry_id")Integer basePoetryID,

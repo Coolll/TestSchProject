@@ -12,7 +12,7 @@ public class PoetryBackEntity {
     private String source_explain;
     private String transfer_info;
     private Integer likes;
-    private Integer text_color;//0为默认色 1为白色
+    private String text_color;//0为默认色 1为白色
     private String image_url;
 
     public PoetryBackEntity(PoetryDetailEntity entity){
@@ -28,7 +28,11 @@ public class PoetryBackEntity {
         this.transfer_info = entity.getTransfer_info();
         this.likes = entity.getLikes();
         this.text_color = entity.getText_color();
-        this.image_url = entity.getImageEntity().getImage_url();
+        if (entity.getImageEntity().getImage_base_url() == null){
+            this.image_url = "";
+        }else {
+            this.image_url = entity.getImageEntity().getImage_base_url()+entity.getImageEntity().getOrigin_url();
+        }
     }
 
     public String getSource_explain() {
@@ -119,11 +123,11 @@ public class PoetryBackEntity {
         this.likes = likes;
     }
 
-    public Integer getText_color() {
+    public String getText_color() {
         return text_color;
     }
 
-    public void setText_color(Integer text_color) {
+    public void setText_color(String text_color) {
         this.text_color = text_color;
     }
 
