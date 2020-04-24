@@ -5,10 +5,7 @@ import com.wql.baseFile.BaseService;
 import com.wql.poetry.dao.ImageDao;
 import com.wql.poetry.dao.PoetryDao;
 import com.wql.poetry.model.*;
-import com.wql.poetry.param.AllBgImagesParam;
-import com.wql.poetry.param.HotPoetryParam;
-import com.wql.poetry.param.LikeOrDislikeParam;
-import com.wql.poetry.param.MainClassParam;
+import com.wql.poetry.param.*;
 import com.wql.utils.publicUtils.PublicUtil;
 import com.wql.utils.result.CodeMsg;
 import com.wql.utils.result.Result;
@@ -45,6 +42,30 @@ public class PoetryService extends BaseService {
 
         return "";
     }
+
+    //更新诗词
+    public Object updatePoetry(PoetryEntity entity){
+
+        SqlSession session = myBatisUtil.openPoetrySqlFactory().openSession();
+        PoetryDao dao = session.getMapper(PoetryDao.class);
+
+        try {
+            dao.updatePoetry(entity);
+            session.commit();
+        }catch (Exception e){
+            StackTraceElement element = Thread.currentThread().getStackTrace()[1];
+            dealException(e,element.getFileName(),element.getLineNumber());
+            session.rollback();
+            return Result.error(CodeMsg.SERVER_EXCEPTION,"更新诗词失败");
+        }finally {
+            if (session != null){
+                session.close();
+            }
+        }
+
+        return "";
+    }
+
 
     //备份图片
     public Object addImage(ImageEntity entity){
@@ -265,7 +286,13 @@ public class PoetryService extends BaseService {
 
         try {
             //查询热门诗词
-            List<PoetryDetailEntity> poetryEntityList = dao.findPoetryWithMainClass(decryptedParam.getMain_class());
+            List<PoetryDetailEntity> poetryEntityList = new ArrayList<>();
+            String mainClass = decryptedParam.getMain_class();
+            if (mainClass.equals("34") || mainClass.equals("35") || mainClass.equals("36")){
+                poetryEntityList = dao.findLunyuWithMainClass(decryptedParam.getMain_class());
+            }else {
+                poetryEntityList = dao.findPoetryWithMainClass(decryptedParam.getMain_class());
+            }
 
             List<PoetryBackEntity> backList = new ArrayList();
             for (PoetryDetailEntity entity:poetryEntityList){
@@ -287,6 +314,8 @@ public class PoetryService extends BaseService {
         }
 
     }
+
+
 
 
     //根据关键词来获取对应的诗词
@@ -326,6 +355,35 @@ public class PoetryService extends BaseService {
         }
 
     }
+
+    public Object loadPoetryAnalysesInfo(LoadPoetryAnalysesParam param){
+        boolean verifySuccess = this.checkIdentity(param);
+        if (!verifySuccess){
+            logger.error("身份校验失败");
+            return Result.error(CodeMsg.VERIFY_FAILED);
+        }
+
+        LoadPoetryAnalysesParam decryptedParam = this.decryptedAESDataToEntity(param,LoadPoetryAnalysesParam.class);
+        SqlSession session = myBatisUtil.openPoetrySqlFactory().openSession();
+        PoetryDao dao = session.getMapper(PoetryDao.class);
+
+        try {
+            //查询热门诗词
+            PoetryAnalysesEntity analysesEntity = dao.loadPoetryAnalyses(decryptedParam.getPoetry_id());
+            session.commit();
+            return Result.success(analysesEntity);
+        }catch (Exception e){
+            StackTraceElement element = Thread.currentThread().getStackTrace()[1];
+            dealException(e,element.getFileName(),element.getLineNumber());
+            session.rollback();
+            return Result.error(CodeMsg.SERVER_EXCEPTION,"搜索诗词失败");
+        }finally {
+            if (session != null){
+                session.close();
+            }
+        }
+    }
+
 
     //获取评测的诗词
     public Object loadEvaluatePoetry(BaseParam param){

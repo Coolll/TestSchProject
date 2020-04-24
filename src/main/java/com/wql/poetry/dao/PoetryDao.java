@@ -9,7 +9,10 @@ public interface PoetryDao {
     //新增诗词
     public int insertPoetry(PoetryEntity entity);
 
-    //搜寻热门诗词
+    //更新诗词
+    public int updatePoetry(PoetryEntity entity);
+
+    //搜索热门诗词
     public List<PoetryDetailEntity> findHotPoetry(@Param("from_index")Integer from,
                                             @Param("count")Integer count);
 
@@ -32,6 +35,9 @@ public interface PoetryDao {
     //根据mainClass搜索诗词
     public List<PoetryDetailEntity> findPoetryWithMainClass(@Param("main_class")String mainClass);
 
+    //根据mainClass搜索诗词
+    public List<PoetryDetailEntity> findLunyuWithMainClass(@Param("main_class")String mainClass);
+
     //根据关键词搜索诗词
     public List<PoetryDetailEntity> findPoetryWithKeywordAndPage(@Param("keyword")String keyword,
                                                                  @Param("from_index")Integer from,
@@ -42,6 +48,8 @@ public interface PoetryDao {
                                                         @Param("from_index")Integer from,
                                                         @Param("count")Integer count);
 
+    //获取某一首诗词的鉴赏信息
+    public PoetryAnalysesEntity loadPoetryAnalyses(@Param("poetry_id")Integer poetryID);
 
 
 }

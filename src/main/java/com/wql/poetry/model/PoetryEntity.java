@@ -13,6 +13,8 @@ public class PoetryEntity {
     private String source;
     private String source_explain;
     private String transfer_info;
+    private String background_info;
+    private String analyses_info;
     private Integer likes;
     private String text_color;//r,g,b,alpha
 
@@ -126,5 +128,21 @@ public class PoetryEntity {
 
     public void setLikes(Integer likes) {
         this.likes = likes;
+    }
+
+    public String getBackground_info() {
+        return background_info;
+    }
+
+    public void setBackground_info(String background_info) {
+        this.background_info = background_info;
+    }
+
+    public String getAnalyses_info() {
+        return analyses_info;
+    }
+
+    public void setAnalyses_info(String analyses_info) {
+        this.analyses_info = analyses_info;
     }
 }

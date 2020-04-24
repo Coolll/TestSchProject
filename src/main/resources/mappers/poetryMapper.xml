@@ -24,9 +24,34 @@
         )
     </insert>
 
+    <!--更新诗词信息-->
+    <update id="updatePoetry" parameterType="com.wql.poetry.model.PoetryEntity">
+        update poetry_table
+        set
+        poetry_id = #{poetry_id}
+        <if test="name != null">,name=#{name}</if>
+        <if test="author != null">,author = #{author}</if>
+        <if test="content != null">,content = #{content}</if>
+        <if test="content != null">,content = #{content}</if>
+        <if test="addition_info != null">,addition_info = #{addition_info}</if>
+        <if test="class_info != null">,class_info = #{class_info}</if>
+        <if test="class_info_explain != null">,class_info_explain=#{class_info_explain}</if>
+        <if test="main_class != null">,main_class=#{main_class}</if>
+        <if test="main_class_explain != null">,main_class_explain=#{main_class_explain}</if>
+        <if test="source != null">,source=#{source}</if>
+        <if test="source_explain != null">,source_explain=#{source_explain}</if>
+        <if test="transfer_info != null">,transfer_info=#{transfer_info}</if>
+        <if test="background_info != null">,background_info=#{background_info}</if>
+        <if test="analyses_info != null">,analyses_info=#{analyses_info}</if>
+        <if test="likes != null">,likes=#{likes}</if>
+        where poetry_id=#{poetry_id}
+    </update>
+
     <!--首页的热门诗词-->
     <select id="findHotPoetry" resultMap="PoetryDetailMap">
-        select * from
+        select
+        poetry_id,name,author,content,likes,pt.class_info,bt.class_info,bt.image_base_url,bt.origin_url,class_info_explain,main_class,main_class_explain,source,source_explain,text_color
+        from
         poetry_table pt
         left join
         bgImage_table bt
@@ -68,9 +93,11 @@
     </select>
 
 
-    <!--获取到对应主分类的全部诗词-->
+    <!--获取到对应主分类的全部诗词 不含翻译-->
     <select id="findPoetryWithMainClass" resultMap="PoetryDetailMap">
-        select * from
+        select
+        poetry_id,name,author,content,likes,pt.class_info,bt.class_info,bt.image_base_url,bt.origin_url,class_info_explain,main_class,main_class_explain,source,source_explain,text_color
+        from
         poetry_table pt
         left join
         bgImage_table bt
@@ -79,6 +106,15 @@
         order by pt.poetry_id desc
     </select>
 
+    <!--获取到论语主分类的全部诗词 包含翻译-->
+    <select id="findLunyuWithMainClass" resultMap="PoetryDetailMap">
+        select
+        poetry_id,name,author,content,likes,class_info,class_info_explain,main_class,main_class_explain,source,source_explain,text_color,transfer_info
+        from
+        poetry_table
+        where main_class = #{main_class}
+        order by poetry_id desc
+    </select>
 
     <resultMap id="PoetryDetailMap" type="com.wql.poetry.model.PoetryDetailEntity">
 
@@ -109,7 +145,9 @@
 
     <!--获取到对应主分类的全部诗词-->
     <select id="findPoetryWithKeywordAndPage" resultMap="PoetryDetailMap">
-        select * from
+        select
+        poetry_id,name,author,content,likes,class_info,class_info_explain,main_class,main_class_explain,source,source_explain,text_color
+        from
         poetry_table pt
         left join
         bgImage_table bt
@@ -133,4 +171,9 @@
         limit #{from_index},#{count}
     </select>
 
+    <select id="loadPoetryAnalyses" resultType="com.wql.poetry.model.PoetryAnalysesEntity">
+        select poetry_id,addition_info,transfer_info,analyses_info,background_info from
+        poetry_table
+        where  poetry_id = #{poetry_id}
+    </select>
 </mapper>

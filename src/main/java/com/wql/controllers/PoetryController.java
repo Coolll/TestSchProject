@@ -4,10 +4,7 @@ import com.wql.baseFile.BaseParam;
 import com.wql.poetry.model.ImageEntity;
 import com.wql.poetry.model.PoetryEntity;
 import com.wql.poetry.model.SearchPoetryParam;
-import com.wql.poetry.param.AllBgImagesParam;
-import com.wql.poetry.param.HotPoetryParam;
-import com.wql.poetry.param.LikeOrDislikeParam;
-import com.wql.poetry.param.MainClassParam;
+import com.wql.poetry.param.*;
 import com.wql.poetry.service.PoetryService;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +21,12 @@ public class PoetryController {
     @RequestMapping(value = "api/poetry/insert",method = RequestMethod.POST)
     public Object insertPoetry(@RequestBody PoetryEntity param){
         return service.addPoetry(param);
+    }
+
+    //更新诗词
+    @RequestMapping(value = "api/poetry/update",method = RequestMethod.POST)
+    public Object updatePoetry(@RequestBody PoetryEntity param){
+        return service.updatePoetry(param);
     }
 
     //新增背景图片信息
@@ -63,17 +66,25 @@ public class PoetryController {
         return service.loadAllPoetryConfigure(param);
     }
 
-    //根据mainClass获取对应的诗词
+    //根据mainClass获取对应的诗词（不含翻译）
     @RequestMapping(value = "api/poetry/loadPoetryWithMainClass",method = RequestMethod.POST)
     public Object loadPoetryWithMainClass(@RequestBody MainClassParam param){
         return service.loadPoetryWithParam(param);
     }
+
 
     //根据关键词获取对应的诗词
     @RequestMapping(value = "api/poetry/loadPoetryWithKeyword",method = RequestMethod.POST)
     public Object loadPoetryWithKeyword(@RequestBody SearchPoetryParam param){
         return service.loadPoetryWithKeyword(param);
     }
+
+    //根据ID获取诗词的鉴赏信息
+    @RequestMapping(value = "api/poetry/loadPoetryAnalysesInfo",method = RequestMethod.POST)
+    public Object loadPoetryAnalysesInfo(@RequestBody LoadPoetryAnalysesParam param){
+        return service.loadPoetryAnalysesInfo(param);
+    }
+
 
     //获取评测的诗词
     @RequestMapping(value = "api/poetry/loadEvaluatePoetry",method = RequestMethod.POST)
