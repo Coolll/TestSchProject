@@ -28,7 +28,7 @@ public class PoetryBackEntity {
         this.transfer_info = entity.getTransfer_info();
         this.likes = entity.getLikes();
         this.text_color = entity.getText_color();
-        if (entity.getImageEntity().getImage_base_url() == null){
+        if (entity.getImageEntity() == null || entity.getImageEntity().getImage_base_url() == null){
             this.image_url = "";
         }else {
             this.image_url = entity.getImageEntity().getImage_base_url()+entity.getImageEntity().getOrigin_url();

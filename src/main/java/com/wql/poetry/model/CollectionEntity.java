@@ -4,6 +4,15 @@ public class CollectionEntity {
     private Integer user_id;
     private Integer poetry_id;
     private PoetryEntity poetryEntity;
+    private ImageEntity imageEntity;
+
+    public ImageEntity getImageEntity() {
+        return imageEntity;
+    }
+
+    public void setImageEntity(ImageEntity imageEntity) {
+        this.imageEntity = imageEntity;
+    }
 
     public Integer getUser_id() {
         return user_id;

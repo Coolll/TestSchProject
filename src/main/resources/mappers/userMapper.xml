@@ -69,11 +69,15 @@
 
     <!--查找用户的收藏列表-->
     <select id="findUserCollectionList" resultMap="CollectionMap">
-        select *
+        select lt.user_id,lt.poetry_id,pt.poetry_id,pt.name,pt.author,pt.content,pt.likes,pt.class_info,pt.class_info_explain,pt.main_class,pt.main_class_explain,pt.source,pt.source_explain,pt.text_color,
+        bt.class_info,bt.image_base_url,bt.origin_url
         from like_poetry_table lt
         left join
         poetry_table pt
         on lt.poetry_id = pt.poetry_id
+
+        left join bgImage_table bt
+        on bt.class_info = pt.class_info
         where
         lt.user_id = #{user_id}
 
@@ -86,23 +90,24 @@
         <result column="poetry_id" property="poetry_id"/>
 
         <association property="poetryEntity" javaType="com.wql.poetry.model.PoetryEntity">
-
-
             <result column="poetry_id" property="poetry_id"/>
             <result column="name" property="name"/>
             <result column="author" property="author"/>
             <result column="content" property="content"/>
-            <result column="addition_info" property="addition_info"/>
             <result column="class_info" property="class_info"/>
             <result column="class_info_explain" property="class_info_explain"/>
             <result column="main_class" property="main_class"/>
             <result column="main_class_explain" property="main_class_explain"/>
             <result column="source" property="source"/>
             <result column="source_explain" property="source_explain"/>
-            <result column="transfer_info" property="transfer_info"/>
             <result column="likes" property="likes"/>
             <result column="text_color" property="text_color"/>
+        </association>
 
+        <association property="imageEntity" javaType="com.wql.poetry.model.ImageEntity">
+            <result column="image_base_url" property="image_base_url"/>
+            <result column="origin_url" property="origin_url"/>
+            <result column="class_info" property="class_info"/>
         </association>
     </resultMap>
 

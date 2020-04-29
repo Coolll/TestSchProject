@@ -143,10 +143,10 @@
     </resultMap>
 
 
-    <!--获取到对应主分类的全部诗词-->
+    <!--获取到搜索关键词的全部诗词-->
     <select id="findPoetryWithKeywordAndPage" resultMap="PoetryDetailMap">
         select
-        poetry_id,name,author,content,likes,class_info,class_info_explain,main_class,main_class_explain,source,source_explain,text_color
+        poetry_id,name,author,content,likes,bt.class_info,pt.class_info,bt.image_base_url,bt.origin_url,class_info_explain,main_class,main_class_explain,source,source_explain,text_color
         from
         poetry_table pt
         left join
