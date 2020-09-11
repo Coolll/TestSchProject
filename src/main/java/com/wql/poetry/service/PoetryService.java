@@ -66,6 +66,29 @@ public class PoetryService extends BaseService {
         return "";
     }
 
+    //更新诗词
+    public Object updateOrInsertPoetry(PoetryEntity entity){
+
+        SqlSession session = myBatisUtil.openPoetrySqlFactory().openSession();
+        PoetryDao dao = session.getMapper(PoetryDao.class);
+
+        try {
+            dao.updateOrInsertPoetry(entity);
+            session.commit();
+        }catch (Exception e){
+            StackTraceElement element = Thread.currentThread().getStackTrace()[1];
+            dealException(e,element.getFileName(),element.getLineNumber());
+            session.rollback();
+            return Result.error(CodeMsg.SERVER_EXCEPTION,"更新诗词失败");
+        }finally {
+            if (session != null){
+                session.close();
+            }
+        }
+
+        return "";
+    }
+
 
     //备份图片
     public Object addImage(ImageEntity entity){
@@ -222,8 +245,40 @@ public class PoetryService extends BaseService {
         ImageDao dao = session.getMapper(ImageDao.class);
 
         try {
-            //查询热门诗词
+            //查询图片列表
             List<ImageEntity> imageList = dao.findAllImages();
+            session.commit();
+            return Result.success(imageList);
+        }catch (Exception e){
+            StackTraceElement element = Thread.currentThread().getStackTrace()[1];
+            dealException(e,element.getFileName(),element.getLineNumber());
+            session.rollback();
+            return Result.error(CodeMsg.SERVER_EXCEPTION,"获取图片失败");
+        }finally {
+            if (session != null){
+                session.close();
+            }
+        }
+
+    }
+
+
+    //获取全部头像图片
+    public Object loadAllHeadImages(AllHeadImageParam param){
+
+        boolean verifySuccess = this.checkIdentity(param);
+        if (!verifySuccess){
+            logger.error("身份校验失败");
+            return Result.error(CodeMsg.VERIFY_FAILED);
+        }
+
+        AllHeadImageParam decryptedParam = this.decryptedAESDataToEntity(param,AllHeadImageParam.class);
+        SqlSession session = myBatisUtil.openPoetrySqlFactory().openSession();
+        ImageDao dao = session.getMapper(ImageDao.class);
+
+        try {
+            //查询全部头像
+            List<HeadImageEntity> imageList = dao.findAllHeadImages();
             session.commit();
             return Result.success(imageList);
         }catch (Exception e){

@@ -1,5 +1,7 @@
 package com.wql.poetry.model;
 
+import com.mysql.cj.util.StringUtils;
+
 public class PoetryBackEntity {
     private Integer poetry_id;
     private String name;
@@ -28,6 +30,7 @@ public class PoetryBackEntity {
         this.transfer_info = entity.getTransfer_info();
         this.likes = entity.getLikes();
         this.text_color = entity.getText_color();
+
         if (entity.getImageEntity() == null || entity.getImageEntity().getImage_base_url() == null){
             this.image_url = "";
         }else {

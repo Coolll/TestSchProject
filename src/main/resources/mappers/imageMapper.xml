@@ -16,6 +16,13 @@
         where image_id > 9999
     </select>
 
+    <select id="findAllHeadImages" resultType="com.wql.poetry.model.HeadImageEntity">
+        select head_image_id,head_image_base_url,origin_url,thumb_url
+        from  headImage_table
+        order by head_image_id asc
+    </select>
+
+
     <select id="findHomeTopImage" resultType="com.wql.poetry.model.ImageEntity">
         select * from bgImage_table
         where class_info = 0

@@ -23,10 +23,16 @@ public class PoetryController {
         return service.addPoetry(param);
     }
 
-    //更新诗词
+    //更新诗词（存在的情况下）
     @RequestMapping(value = "api/poetry/update",method = RequestMethod.POST)
     public Object updatePoetry(@RequestBody PoetryEntity param){
         return service.updatePoetry(param);
+    }
+
+    //存在更新，不存在新增 诗词
+    @RequestMapping(value = "api/poetry/updateOrInsert",method = RequestMethod.POST)
+    public Object updateOrInsertPoetry(@RequestBody PoetryEntity param){
+        return service.updateOrInsertPoetry(param);
     }
 
     //新增背景图片信息
@@ -58,6 +64,12 @@ public class PoetryController {
     @RequestMapping(value = "api/poetry/loadAllImages",method = RequestMethod.POST)
     public Object loadAllImages(@RequestBody AllBgImagesParam param){
         return service.loadAllImages(param);
+    }
+
+    //获取全部的头像图片
+    @RequestMapping(value = "api/poetry/loadAllHeadImages",method = RequestMethod.POST)
+    public Object loadAllHeadImages(@RequestBody AllHeadImageParam param){
+        return service.loadAllHeadImages(param);
     }
 
     //获取全部的诗词配置

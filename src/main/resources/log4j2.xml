@@ -4,11 +4,11 @@
     <!-- OFF > FATAL > ERROR > WARN > INFO > DEBUG > TRACE > ALL -->
 
     <properties>
-        <Property name = "SERVER_LOG_DIR">/data/software/Poetry/log</Property>
+        <!--<Property name = "SERVER_LOG_DIR">/data/software/Poetry/log</Property>-->
         <Property name = "INFO_NAME">info</Property>
         <Property name = "DEBUG_NAME">debug</Property>
         <Property name = "ERROR_NAME">error</Property>
-        <Property name = "LOCAL_LOG_DIR">/Users/bianla/Desktop/TestSchProject/logs</Property>
+        <Property name = "LOCAL_LOG_DIR">/Users/longpei/Desktop/TestSchProject/logs</Property>
         <Property name="BASE_PATTERN">%d{yyyy-MM-dd HH:mm:ss} [%t] [%c] [%M]%m%n</Property>
     </properties>
 

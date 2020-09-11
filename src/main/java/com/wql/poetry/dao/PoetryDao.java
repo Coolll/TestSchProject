@@ -12,6 +12,9 @@ public interface PoetryDao {
     //更新诗词
     public int updatePoetry(PoetryEntity entity);
 
+    //存在则更新，不存在则插入
+    public int updateOrInsertPoetry(PoetryEntity entity);
+
     //搜索热门诗词
     public List<PoetryDetailEntity> findHotPoetry(@Param("from_index")Integer from,
                                             @Param("count")Integer count);

@@ -47,6 +47,43 @@
         where poetry_id=#{poetry_id}
     </update>
 
+    <insert id="updateOrInsertPoetry" parameterType="com.wql.poetry.model.PoetryEntity">
+        insert into poetry_table(poetry_id,name, author, content, addition_info, class_info,class_info_explain, main_class,main_class_explain, source,source_explain, transfer_info,likes)
+        values (
+        #{poetry_id,jdbcType=INTEGER},
+        #{name,jdbcType=CHAR},
+        #{author,jdbcType=CHAR},
+        #{content,jdbcType=CHAR},
+        #{addition_info,jdbcType=CHAR},
+        #{class_info,jdbcType=CHAR},
+        #{class_info_explain,jdbcType=CHAR},
+        #{main_class,jdbcType=CHAR},
+        #{main_class_explain,jdbcType=CHAR},
+        #{source,jdbcType=CHAR},
+        #{source_explain,jdbcType=CHAR},
+        #{transfer_info,jdbcType=CHAR},
+        #{likes,jdbcType=INTEGER}
+        )
+        ON DUPLICATE KEY UPDATE
+        poetry_id = #{poetry_id}
+        <if test="name != null">,name=#{name}</if>
+        <if test="author != null">,author = #{author}</if>
+        <if test="content != null">,content = #{content}</if>
+        <if test="content != null">,content = #{content}</if>
+        <if test="addition_info != null">,addition_info = #{addition_info}</if>
+        <if test="class_info != null">,class_info = #{class_info}</if>
+        <if test="class_info_explain != null">,class_info_explain=#{class_info_explain}</if>
+        <if test="main_class != null">,main_class=#{main_class}</if>
+        <if test="main_class_explain != null">,main_class_explain=#{main_class_explain}</if>
+        <if test="source != null">,source=#{source}</if>
+        <if test="source_explain != null">,source_explain=#{source_explain}</if>
+        <if test="transfer_info != null">,transfer_info=#{transfer_info}</if>
+        <if test="background_info != null">,background_info=#{background_info}</if>
+        <if test="analyses_info != null">,analyses_info=#{analyses_info}</if>
+        <if test="likes != null">,likes=#{likes}</if>
+
+    </insert>
+
     <!--首页的热门诗词-->
     <select id="findHotPoetry" resultMap="PoetryDetailMap">
         select
