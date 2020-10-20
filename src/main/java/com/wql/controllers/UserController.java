@@ -54,5 +54,12 @@ public class UserController {
         return service.loadUserChallenge(param);
     }
 
+    //设置头像
+    @RequestMapping(value = "api/user/update/headImage",method = RequestMethod.POST)
+    public Object loadUserChallenges(@RequestBody UpdateHeaderImageParam param){
+
+        return service.updateUserHeadImage(param);
+    }
+
 
 }

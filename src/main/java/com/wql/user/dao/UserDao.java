@@ -15,6 +15,8 @@ public interface UserDao {
 
     public void updateUser(UserEntity entity);
 
+    public void updateUserHeadImage(@Param("head_image")String head_image,
+                                    @Param("user_id")Integer user_id);
 
     //查找一个人的收藏的诗词(仅返回ID)
     public List<Integer> findUserLikeList(@Param("user_id")Integer userId);

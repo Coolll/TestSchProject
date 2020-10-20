@@ -41,6 +41,15 @@
         where user_id=#{user_id}
     </update>
 
+    <!--更新用户头像-->
+    <update id="updateUserHeadImage">
+        update user_table
+        set
+        user_id = #{user_id}
+        <if test="head_image != null">,head_image=#{head_image}</if>
+        where user_id=#{user_id}
+    </update>
+
     <!--根据昵称查找用户-->
     <select id="findUser" resultType="com.wql.user.model.UserEntity">
         select * from user_table

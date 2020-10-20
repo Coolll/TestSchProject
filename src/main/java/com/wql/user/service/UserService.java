@@ -290,5 +290,35 @@ public class UserService extends BaseService {
 
     }
 
+    //修改用户的头像
+    public Object updateUserHeadImage(UpdateHeaderImageParam param){
+
+        boolean verifySuccess = this.checkIdentity(param);
+        if (!verifySuccess){
+            logger.error("身份校验失败");
+            return Result.error(CodeMsg.VERIFY_FAILED);
+        }
+
+        UpdateHeaderImageParam decryptedParam = this.decryptedAESDataToEntity(param,UpdateHeaderImageParam.class);
+        SqlSession session = myBatisUtil.openPoetrySqlFactory().openSession();
+        UserDao dao = session.getMapper(UserDao.class);
+
+        try {
+            dao.updateUserHeadImage(decryptedParam.getHeadImageUrl(),decryptedParam.getUser_id());
+            session.commit();
+            return Result.success();
+        }catch (Exception e){
+            StackTraceElement element = Thread.currentThread().getStackTrace()[1];
+            dealException(e,element.getFileName(),element.getLineNumber());
+            session.rollback();
+            return Result.error(CodeMsg.SERVER_EXCEPTION,"修改用户头像失败");
+        }finally {
+            if (session != null){
+                session.close();
+            }
+        }
+
+    }
+
 
 }
